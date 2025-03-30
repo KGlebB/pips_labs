@@ -19,5 +19,11 @@ import { PredictionsService } from './services/predictions.service';
     CompaniesService,
     PredictionsService,
   ],
+  exports: [
+    AggregatorsService,
+    ArticlesService,
+    CompaniesService,
+    PredictionsService,
+  ],
 })
 export class DatabaseModule {}

@@ -37,6 +37,12 @@ export class Article extends BaseEntity {
   @Column()
   url: string;
 
+  @Column({ type: 'real', nullable: true })
+  expertScore: number;
+
+  @Column({ type: 'real', nullable: true })
+  prediction: number;
+
   @OneToMany(() => Prediction, (prediction) => prediction.article, {
     orphanedRowAction: 'delete',
   })
