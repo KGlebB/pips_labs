@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ExternalSourcesModule } from './external-sources/external-sources.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ModelModule } from './model/model.module';
+import { HttpHandlerModule } from './http-handler/http-handler.module';
 
 @Module({
   imports: [
@@ -19,8 +18,7 @@ import { ModelModule } from './model/model.module';
     DatabaseModule,
     ExternalSourcesModule,
     ModelModule,
+    HttpHandlerModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

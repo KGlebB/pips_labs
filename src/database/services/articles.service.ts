@@ -12,9 +12,38 @@ export class ArticlesService {
     private readonly predictionsService: PredictionsService,
   ) {}
 
+  getOne(id: number): Promise<Article> {
+    return this.repository.findOneOrFail({
+      where: { id },
+      relations: { aggregator: true, predictions: { company: true } },
+    });
+  }
+
+  getMany(page = 0): Promise<Article[]> {
+    return this.repository.find({
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        prediction: true,
+        createdAt: true,
+        aggregator: { id: true, slug: true, name: true },
+        predictions: {
+          id: true,
+          company: { id: true, slug: true, name: true },
+        },
+      },
+      relations: { aggregator: true, predictions: { company: true } },
+      order: { createdAt: 'DESC' },
+      skip: 50 * page,
+      take: 50,
+    });
+  }
+
   getLastWithExpertScore(): Promise<Article[]> {
     return this.repository.find({
       where: { expertScore: Not(IsNull()) },
+      order: { createdAt: 'DESC' },
       take: 250,
     });
   }

@@ -1,0 +1,12 @@
+extends template
+
+block content
+  h1 #{article.title}
+  p Оценка: #{article.prediction}
+    if article.predictions.length > 0
+      |  для компаний #{article.predictions.map((p)=>(p.company.slug.toUpperCase())).join(', ')}
+  p Источник: #{article.aggregator.name}
+  p
+    i Ссылка на оригинал: 
+      a(href=article.url) #{article.url}
+  p #{article.content}

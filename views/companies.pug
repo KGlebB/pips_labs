@@ -1,0 +1,8 @@
+extends template
+
+block content
+  h1 Публичные компании
+  ul.list-group
+    each company in companies
+      li.list-group-item
+        a(href=`company/${company.id}`) #{company.name}

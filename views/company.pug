@@ -1,0 +1,24 @@
+extends template
+
+block content
+  h1 #{company.name}
+  p Тикер на бирже: $#{company.slug.toUpperCase()}
+
+  if company.aliases && company.aliases.length > 0
+    h4 Другие названия
+    ul
+      each alias in company.aliases.split(',')
+        li #{alias}
+  else
+    p Других названий не найдено
+
+  if company.predictions.length > 0
+    h2 Связанные новости
+    ul.list-group
+      each prediction in company.predictions
+        li.list-group-item
+          p
+            a(href=`/article/${prediction.article.id}`) #{prediction.article.title.length > 128 ? prediction.article.title.substring(0, 125) + '...' : prediction.article.title}
+            i  (#{prediction.article.prediction})
+  else
+    p Связанных с данной компанией новостей ещё нет

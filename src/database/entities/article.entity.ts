@@ -46,7 +46,7 @@ export class Article extends BaseEntity {
   @OneToMany(() => Prediction, (prediction) => prediction.article, {
     orphanedRowAction: 'delete',
   })
-  predictions: string;
+  predictions: Prediction;
 
   @CreateDateColumn()
   createdAt: string;

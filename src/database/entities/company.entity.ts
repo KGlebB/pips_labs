@@ -25,5 +25,5 @@ export class Company extends BaseEntity {
     cascade: true,
     orphanedRowAction: 'delete',
   })
-  predictions: string;
+  predictions: Prediction;
 }

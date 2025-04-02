@@ -1,0 +1,14 @@
+extends template
+
+block content
+  h1 Новостные статьи
+  ul.list-group
+    each article in articles
+      li.list-group-item
+        h2
+          a(href=`/article/${article.id}`) #{article.title.length > 128 ? article.title.substring(0, 125) + '...' : article.title}
+        p
+          i Источник: #{article.aggregator.name}
+        p Прогноз: #{article.prediction}
+          if article.predictions.length > 0
+            |  для компаний #{article.predictions.map((p)=>(p.company.slug.toUpperCase())).join(', ')}

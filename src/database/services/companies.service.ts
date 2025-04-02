@@ -12,6 +12,17 @@ export class CompaniesService implements OnModuleInit {
     @InjectRepository(Company) private readonly repository: Repository<Company>,
   ) {}
 
+  getOne(id: number): Promise<Company> {
+    return this.repository.findOneOrFail({
+      where: { id },
+      relations: { predictions: { article: { aggregator: true } } },
+    });
+  }
+
+  getAll(): Promise<Company[]> {
+    return this.repository.find();
+  }
+
   async onModuleInit(): Promise<void> {
     const count = await this.repository.count();
     if (count === 0) {
