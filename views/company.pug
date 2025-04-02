@@ -18,7 +18,9 @@ block content
       each prediction in company.predictions
         li.list-group-item
           p
+            - var badgeColor = (prediction.article.prediction < -0.6) ? '#8B0000' : (prediction.article.prediction < -0.2) ? '#FF6347' : (prediction.article.prediction < 0.2) ? '#FFD700' : (prediction.article.prediction < 0.6) ? '#98FB98' : '#ADD8E6';
+            span.badge(style={"background-color": badgeColor}) #{(prediction.article.prediction*100).toFixed(2)}%
+            | 
             a(href=`/article/${prediction.article.id}`) #{prediction.article.title.length > 128 ? prediction.article.title.substring(0, 125) + '...' : prediction.article.title}
-            i  (#{prediction.article.prediction})
   else
     p Связанных с данной компанией новостей ещё нет

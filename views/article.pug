@@ -1,11 +1,33 @@
 extends template
 
 block content
-  h1 #{article.title}
-  p Оценка: #{article.prediction}
-    if article.predictions.length > 0
-      |  для компаний #{article.predictions.map((p)=>(p.company.slug.toUpperCase())).join(', ')}
-  p Источник: #{article.aggregator.name}
+  - var badgeColor = (article.prediction < -0.6) ? '#8B0000' : (article.prediction < -0.2) ? '#FF6347' : (article.prediction < 0.2) ? '#FFD700' : (article.prediction < 0.6) ? '#98FB98' : '#ADD8E6';
+  - var sentimentClass = (article.prediction < -0.6) ? 'крайне негативной' : (article.prediction < -0.2) ? 'негативной' : (article.prediction < 0.2) ? 'нейтральной' : (article.prediction < 0.6) ? 'положительной' : 'крайне положительной';
+  - var stocksRecomendation = (article.prediction < -0.6) ? 'продавать' : (article.prediction < -0.2) ? 'немного продавать' : (article.prediction < 0.2) ? 'держать' : (article.prediction < 0.6) ? 'немного покупать' : 'покупать';
+  h1
+    span.badge(style={"background-color": badgeColor}) #{(article.prediction*100).toFixed(2)}%
+    | 
+    | #{article.title}
+  p
+    b Данная новость является #{sentimentClass}.
+  p
+    b Рекомендации для инвесторов:
+  ul
+    each prediction in article.predictions
+      li
+        a(href=`/company/${prediction.company.id}`) #{prediction.company.name} ($#{prediction.company.slug.toUpperCase()})
+        | 
+        | -
+        | 
+        span.badge(style={"background-color": badgeColor}) #{stocksRecomendation}
+  p
+    b Источник:
+    | 
+    | #{article.aggregator.name}
+  p
+    b Дата и время выхода новости:
+    | 
+    | #{new Date(article.createdAt).toLocaleString()}
   p
     i Ссылка на оригинал: 
       a(href=article.url) #{article.url}

@@ -49,13 +49,13 @@ export class ParserService implements OnModuleInit {
     });
   }
 
+  @Cron('* * * * *')
   async getNewArticles() {
     for (let i = 0; i < 10; ++i) {
       await this.getNewArticle();
     }
   }
 
-  @Cron('* * * * *')
   async getNewArticle() {
     if (this.articlesData.length === 0) {
       throw new Error('Нет данных для загрузки');
@@ -104,7 +104,7 @@ export class ParserService implements OnModuleInit {
         }, timeout);
       } else {
         this.logger.warn(
-          `Нет экспертной оценки '${data.score}' для статьи ${article.id}.`,
+          `Нет экспертной оценки '${data.score}' для новости ${article.id}.`,
         );
       }
       return article;

@@ -73,8 +73,6 @@ def train(prefix=""):
     'MSE': mse,
     'RMSE': rmse,
     'R2': r2,
-    'MAD': mad,
-    'MAPE': mape,
     'Training Time (seconds)': elapsed_time
   }
 

@@ -4,11 +4,19 @@ block content
   h1 Новостные статьи
   ul.list-group
     each article in articles
+      - var badgeColor = (article.prediction < -0.6) ? '#8B0000' : (article.prediction < -0.2) ? '#FF6347' : (article.prediction < 0.2) ? '#FFD700' : (article.prediction < 0.6) ? '#98FB98' : '#ADD8E6';
+      - var isNew = (new Date() - new Date(article.createdAt)) <= 2.5 * 60 * 1000;
       li.list-group-item
         h2
+          if isNew
+            span.badge(style={"background-color": 'lightblue'}) NEW!
+            | 
+          span.badge(style={"background-color": badgeColor}) #{(article.prediction*100).toFixed(2)}%
+          | 
           a(href=`/article/${article.id}`) #{article.title.length > 128 ? article.title.substring(0, 125) + '...' : article.title}
         p
           i Источник: #{article.aggregator.name}
-        p Прогноз: #{article.prediction}
+        p Новость от #{new Date(article.createdAt).toLocaleString()}
           if article.predictions.length > 0
-            |  для компаний #{article.predictions.map((p)=>(p.company.slug.toUpperCase())).join(', ')}
+            | 
+            | для компании #{article.predictions.map((p)=>(p.company.slug.toUpperCase())).join(', ')}
