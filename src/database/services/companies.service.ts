@@ -19,4 +19,8 @@ export class CompaniesService implements OnModuleInit {
       this.logger.log('Инициализация компаний');
     }
   }
+
+  async getBySlug(slug: string): Promise<Company | null> {
+    return this.repository.findOneBy({ slug });
+  }
 }

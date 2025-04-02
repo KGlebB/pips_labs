@@ -5,6 +5,7 @@ import { DatabaseModule } from './database/database.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ExternalSourcesModule } from './external-sources/external-sources.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { ModelModule } from './model/model.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     }),
     DatabaseModule,
     ExternalSourcesModule,
+    ModelModule,
   ],
   controllers: [AppController],
   providers: [AppService],

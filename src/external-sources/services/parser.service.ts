@@ -2,6 +2,7 @@ import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import * as fs from 'fs/promises';
 import { ArticlesService } from 'src/database/services/articles.service';
+import { ModelService } from 'src/model/services/model.service';
 
 @Injectable()
 export class ParserService implements OnModuleInit {
@@ -11,10 +12,14 @@ export class ParserService implements OnModuleInit {
     link: string;
     summary: string;
     score: string;
+    companies: string[];
   }> = [];
   private currentLine = 0;
 
-  constructor(private readonly articlesService: ArticlesService) {}
+  constructor(
+    private readonly articlesService: ArticlesService,
+    private readonly modelService: ModelService,
+  ) {}
 
   async onModuleInit() {
     const content = await fs.readFile('misc/mock_data.tsv', 'utf-8');
@@ -29,13 +34,25 @@ export class ParserService implements OnModuleInit {
       headers.forEach((header, index) => {
         entry[header] = values[index]?.trim() || '';
       });
+      entry['tickers'] = entry['tickers'].replaceAll("'", '"');
+      let companies: string[] = [];
+      if (entry.tickers.length > 0) {
+        companies = JSON.parse(entry['tickers']) as string[];
+      }
       return {
         title: entry['title'],
         link: entry['link'],
         summary: entry['summary'],
         score: entry['score'],
+        companies,
       };
     });
+  }
+
+  async getNewArticles() {
+    for (let i = 0; i < 10; ++i) {
+      await this.getNewArticle();
+    }
   }
 
   @Cron('* * * * *')
@@ -49,22 +66,26 @@ export class ParserService implements OnModuleInit {
     const data = this.articlesData[this.currentLine];
     this.currentLine++;
     try {
-      const article = await this.articlesService.create({
-        title: data.title,
-        slug: Array.from(
-          { length: 16 },
-          () => 'abcdefghijklmnopqrstuvwxyz'[Math.floor(Math.random() * 26)],
-        ).join(''),
-        aggregator: { id: 1 },
-        url: data.link,
-        content: data.summary,
-      });
+      const article = await this.articlesService.create(
+        {
+          title: data.title,
+          slug: Array.from(
+            { length: 16 },
+            () => 'abcdefghijklmnopqrstuvwxyz'[Math.floor(Math.random() * 26)],
+          ).join(''),
+          aggregator: { id: 1 },
+          url: data.link,
+          content: data.summary,
+          prediction: await this.modelService.predictTonality(data.title),
+        },
+        data.companies,
+      );
       this.logger.verbose(
         `Из новостного источника извлечена новость #${article.id} // Парсинг новостного сайта`,
       );
       const score = parseFloat(data.score);
       if (!isNaN(score)) {
-        const timeout = 15 * 60 * 1000;
+        const timeout = 0 * 60 * 1000;
         setTimeout(() => {
           this.articlesService
             .update(article.id, {

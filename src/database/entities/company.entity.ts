@@ -22,6 +22,7 @@ export class Company extends BaseEntity {
   aliases: string;
 
   @OneToMany(() => Prediction, (prediction) => prediction.company, {
+    cascade: true,
     orphanedRowAction: 'delete',
   })
   predictions: string;
