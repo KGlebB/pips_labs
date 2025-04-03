@@ -15,9 +15,9 @@ export class ModelService {
   @Cron('*/15 * * * *')
   async handleNewData() {
     this.logger.verbose('Обучение новой модели');
-    await this.datasetService.createCsv();
-    await this.trainModel('new_');
     try {
+      await this.datasetService.createCsv();
+      await this.trainModel('new_');
       const newMetricsPath = join('files', 'new_model_metrics.json');
       if (!existsSync(newMetricsPath)) {
         throw new Error('New model metrics not found');
