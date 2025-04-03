@@ -23,6 +23,6 @@ block content
             | 
             a(href=`/article/${prediction.article.id}`) #{prediction.article.title.length > 128 ? prediction.article.title.substring(0, 125) + '...' : prediction.article.title}
             |
-            | #{new Date(prediction.article.createdAt).toLocaleString()}
+            | (#{new Date(prediction.article.createdAt).toLocaleString('ru_RU')})
   else
     p Связанных с данной компанией новостей ещё нет
