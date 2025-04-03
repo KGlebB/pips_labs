@@ -16,7 +16,7 @@ block content
           a(href=`/article/${article.id}`) #{article.title.length > 128 ? article.title.substring(0, 125) + '...' : article.title}
         p
           i Источник: #{article.aggregator.name}
-        p Новость от #{new Date(article.createdAt).toLocaleString()}
+        p Новость от #{new Date(article.createdAt).toLocaleString('ru-RU')}
           if article.predictions.length > 0
             | 
             | для компании #{article.predictions.map((p)=>(p.company.slug.toUpperCase())).join(', ')}
