@@ -12,7 +12,7 @@ export class ModelService {
 
   constructor(private readonly datasetService: DatasetService) {}
 
-  @Cron('*/15 * * * *')
+  @Cron('*/30 * * * *')
   async handleNewData() {
     this.logger.verbose('Обучение новой модели');
     try {
