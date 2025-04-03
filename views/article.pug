@@ -27,7 +27,7 @@ block content
   p
     b Дата и время выхода новости:
     | 
-    | #{new Date(article.createdAt).toLocaleString()}
+    | #{new Date(article.createdAt).toLocaleString('ru-RU')}
   p
     if article.url.startsWith('https')
       i Ссылка на оригинал: 
