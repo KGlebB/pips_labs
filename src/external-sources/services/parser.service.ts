@@ -70,6 +70,9 @@ export class ParserService implements OnModuleInit {
       try {
         prediction = await this.modelService.predictTonality(data.title);
       } catch (error) {}
+      if (isNaN(prediction)) {
+        prediction = 0;
+      }
       const article = await this.articlesService.create(
         {
           title: data.title,
