@@ -22,5 +22,7 @@ block content
             span.badge(style={"background-color": badgeColor}) #{(prediction.article.prediction*100).toFixed(2)}%
             | 
             a(href=`/article/${prediction.article.id}`) #{prediction.article.title.length > 128 ? prediction.article.title.substring(0, 125) + '...' : prediction.article.title}
+            |
+            | #{new Date(prediction.article.createdAt).toLocaleString()}
   else
     p Связанных с данной компанией новостей ещё нет
