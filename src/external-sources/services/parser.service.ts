@@ -85,7 +85,7 @@ export class ParserService implements OnModuleInit {
       );
       const score = parseFloat(data.score);
       if (!isNaN(score)) {
-        const timeout = 0 * 60 * 1000;
+        const timeout = 40 * 60 * 1000;
         setTimeout(() => {
           this.articlesService
             .update(article.id, {
