@@ -66,6 +66,10 @@ export class ParserService implements OnModuleInit {
     const data = this.articlesData[this.currentLine];
     this.currentLine++;
     try {
+      let prediction = 0;
+      try {
+        prediction = await this.modelService.predictTonality(data.title);
+      } catch (error) {}
       const article = await this.articlesService.create(
         {
           title: data.title,
@@ -76,7 +80,7 @@ export class ParserService implements OnModuleInit {
           aggregator: { id: 1 },
           url: data.link,
           content: data.summary,
-          prediction: await this.modelService.predictTonality(data.title),
+          prediction,
         },
         data.companies,
       );
