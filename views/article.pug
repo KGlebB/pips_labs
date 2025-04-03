@@ -29,6 +29,7 @@ block content
     | 
     | #{new Date(article.createdAt).toLocaleString()}
   p
-    i Ссылка на оригинал: 
-      a(href=article.url) #{article.url}
+    if article.url.startsWith('https')
+      i Ссылка на оригинал: 
+        a(href=article.url) #{article.url}
   p #{article.content}
