@@ -21,9 +21,14 @@ def train(prefix=""):
     tokens = [token for token in tokens if token.isalpha() and len(token) > 2]
     return ' '.join(tokens)
 
-  X_train, X_test, y_train, y_test = train_test_split(
-    df["title"].apply(preprocess_text), df["tonality"], test_size=0.3, random_state=42
-  )
+  test_size = int(len(df) * 0.3)
+  train_df = df[:-test_size]
+  test_df = df[-test_size:]
+
+  X_train = train_df["title"].apply(preprocess_text)
+  y_train = train_df["tonality"]
+  X_test = test_df["title"].apply(preprocess_text)
+  y_test = test_df["tonality"]
 
   vectorizer = TfidfVectorizer()
   vectorizer.fit(df['title'].apply(preprocess_text))
